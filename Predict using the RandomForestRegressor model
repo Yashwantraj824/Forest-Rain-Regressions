@@ -1,10 +1,8 @@
-Explain the Random Forest model used-
 The Random Forest model used in this notebook is a type of ensemble learning method for regression. It works by constructing multiple decision trees during training and outputting the average prediction of the individual trees.
 
 In this case, the RandomForestRegressor is trained on the weather features (tempmax, tempmin, humidity, solarenergy, precip, windspeed) to predict the target variable (temp).
 
 The parameters used are:
-
 max_depth=90: This sets the maximum depth of each tree in the forest. A deeper tree can capture more complex relationships but can also lead to overfitting.
 random_state=0: This ensures reproducibility of the results.
 n_estimators=100: This is the number of trees in the forest. More trees generally lead to better performance but also increase computation time.
