@@ -1,0 +1,202 @@
+import warnings
+warnings.filterwarnings('ignore')
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+
+
+
+weather_df = pd.read_csv('Chennai.csv', parse_dates=['datetime'], index_col='datetime')
+
+weather_features = weather_df[['tempmax', 'tempmin', 'humidity', 'solarenergy', 'precip', 'windspeed']]
+weather_target = weather_df['temp']
+
+train_X, test_X, train_y, test_y = train_test_split(weather_features, weather_target, test_size=0.2, random_state=4)
+
+
+model_lr = LinearRegression()
+
+model_dt = DecisionTreeRegressor(random_state=0)
+
+model_rf = RandomForestRegressor(max_depth=90, random_state=0, n_estimators=100)
+
+model_lr.fit(train_X, train_y)
+
+
+model_dt.fit(train_X, train_y)
+
+model_rf.fit(train_X, train_y)
+
+future_dates = pd.date_range(start='2024-01-01', end='2024-12-31', freq='D')
+
+future_data = pd.DataFrame(index=future_dates)
+future_data['tempmax'] = weather_df['tempmax'].mean()  # or set based on expected max temp
+future_data['tempmin'] = weather_df['tempmin'].mean()  # or set based on expected min temp
+future_data['humidity'] = weather_df['humidity'].mean()
+future_data['solarenergy'] = weather_df['solarenergy'].mean()
+future_data['precip'] = weather_df['precip'].mean()
+future_data['windspeed'] = weather_df['windspeed'].mean()
+
+prediction_2024_lr = model_lr.predict(future_data)
+
+predictions_2024 = pd.DataFrame({
+    'Date': future_dates,
+    'Prediction_LR': prediction_2024_lr,
+})
+
+print(predictions_2024.head(20))
+
+
+prediction_2024_dt = model_dt.predict(future_data)
+
+predictions_2024 = pd.DataFrame({
+    'Date': future_dates,
+     'Prediction_DT': prediction_2024_dt,
+})
+
+print(predictions_2024.head(20))
+
+prediction_2024_rf = model_rf.predict(future_data)
+
+predictions_2024 = pd.DataFrame({
+    'Date': future_dates,
+    'Prediction_RF': prediction_2024_rf
+})
+
+print(predictions_2024.head(20))
+
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+test_predictions_lr = model.predict(test_X)
+test_predictions_dt = regressor.predict(test_X)
+test_predictions_rf = regr.predict(test_X)
+
+for linear regression
+
+mse_lr = mean_squared_error(test_y, test_predictions_lr)
+mae_lr = mean_absolute_error(test_y, test_predictions_lr)
+r2_lr = r2_score(test_y, test_predictions_lr)
+
+for decisiontree regression
+
+mse_dt = mean_squared_error(test_y, test_predictions_dt)
+mae_dt = mean_absolute_error(test_y, test_predictions_dt)
+r2_dt = r2_score(test_y, test_predictions_dt)
+
+
+
+for randomforest regression
+
+mse_rf = mean_squared_error(test_y, test_predictions_rf)
+mae_rf = mean_absolute_error(test_y, test_predictions_rf)
+r2_rf = r2_score(test_y, test_predictions_rf)
+
+print("Linear Regression Performance:")
+print(f"Mean Squared Error (MSE): {mse_lr}")
+print(f"Mean Absolute Error (MAE): {mae_lr}")
+print(f"R-squared (R²): {r2_lr}")
+
+print("\nDecision Tree Regressor Performance:")
+print(f"Mean Squared Error (MSE): {mse_dt}")
+print(f"Mean Absolute Error (MAE): {mae_dt}")
+print(f"R-squared (R²): {r2_dt}")
+
+print("\nRandom Forest Regressor Performance:")
+print(f"Mean Squared Error (MSE): {mse_rf}")
+print(f"Mean Absolute Error (MAE): {mae_rf}")
+print(f"R-squared (R²): {r2_rf}")
+
+print(train_X.describe())
+print(test_X.describe())
+
+print(train_X.isnull().sum())
+print(test_X.isnull().sum())
+
+model.fit(train_X, train_y)
+regressor.fit(train_X, train_y)
+regr.fit(train_X, train_y)
+
+# Test the models again
+test_predictions_lr = model.predict(test_X)
+test_predictions_dt = regressor.predict(test_X)
+test_predictions_rf = regr.predict(test_X)
+
+print(train_y.describe())
+print(test_y.describe())
+
+predifuture_data = pd.DataFrame(index=future_dates)
+future_data['day'] = future_data.index.day
+future_data['month'] = future_data.index.month
+
+
+for month in range(1, 13):
+    month_data = weather_df[weather_df.index.month == month]
+    monthly_avg_features = month_data[['tempmax', 'tempmin', 'humidity', 'solarenergy', 'precip', 'windspeed']].mean()
+
+
+    future_data.loc[future_data.index.month == month, 'tempmax'] = monthly_avg_features['tempmax'] + np.random.normal(0, 1, len(future_data[future_data.index.month == month]))
+    future_data.loc[future_data.index.month == month, 'tempmin'] = monthly_avg_features['tempmin'] + np.random.normal(0, 1, len(future_data[future_data.index.month == month]))
+    future_data.loc[future_data.index.month == month, 'humidity'] = monthly_avg_features['humidity'] + np.random.normal(0, 2, len(future_data[future_data.index.month == month]))
+    future_data.loc[future_data.index.month == month, 'solarenergy'] = monthly_avg_features['solarenergy'] + np.random.normal(0, 0.5, len(future_data[future_data.index.month == month]))
+    future_data.loc[future_data.index.month == month, 'precip'] = monthly_avg_features['precip'] + np.random.normal(0, 0.1, len(future_data[future_data.index.month == month]))
+    future_data.loc[future_data.index.month == month, 'windspeed'] = monthly_avg_features['windspeed'] + np.random.normal(0, 1, len(future_data[future_data.index.month == month]))
+
+future_data_for_prediction = future_data.drop(columns=['day', 'month'])
+
+
+prediction_2024_lr = model.predict(future_data_for_prediction)
+prediction_2024_dt = regressor.predict(future_data_for_prediction)
+prediction_2024_rf = regr.predict(future_data_for_prediction)
+
+
+predictions_2024 = pd.DataFrame({
+    'Date': future_dates,
+    'Prediction_LR': prediction_2024_lr,
+    'Prediction_DT': prediction_2024_dt,
+    'Prediction_RF': prediction_2024_rf
+})
+
+
+october_2024_predictions = predictions_2024[predictions_2024['Date'].dt.month == 10]
+print(october_2024_predictions)
+
+prediction_2024_lr = model.predict(future_data_for_prediction)
+prediction_2024_dt = regressor.predict(future_data_for_prediction)
+prediction_2024_rf = regr.predict(future_data_for_prediction)
+
+
+predictions_2024 = pd.DataFrame({
+    'Date': future_dates,
+    'Prediction_LR': prediction_2024_lr,
+
+})
+
+october_2024_predictions = predictions_2024[predictions_2024['Date'].dt.month == 10]
+print(october_2024_predictions)
+
+predictions_2024 = pd.DataFrame({
+    'Date': future_dates,
+    'Prediction_DT': prediction_2024_dt,
+
+})
+
+october_2024_predictions = predictions_2024[predictions_2024['Date'].dt.month == 10]
+print(october_2024_predictions)
+
+predictions_2024 = pd.DataFrame({
+    'Date': future_dates,
+    'Prediction_RF': prediction_2024_rf
+
+})
+
+october_2024_predictions = predictions_2024[predictions_2024['Date'].dt.month == 10]
+print(october_2024_predictions)
+
+october_2024_predictions = predictions_2024[predictions_2024['Date'].dt.month == 10]
+
+october_2024_predictions = predictions_2024[predictions_2024['Date'].dt.day >= 17]
+
+october_2024_predictions = predictions_2024[predictions_2024['Date'].dt.day >= 17]              #most imp  code
